@@ -14,11 +14,11 @@
 12,cancellation_policy,76,3,moderate,34343,,
 13,room type,0,4,Entire home/apt,53701,Shared room,Entire home/apt
 14,Construction year,214,20,2014.0,5243,2022.0,2003.0
-15,price,247,1151,$206 ,137,,
-16,service fee,273,231,$41 ,526,,
+15,price,247,1151,206.0,137,1200.0,50.0
+16,service fee,273,231,41.0,526,240.0,10.0
 17,minimum nights,409,153,1.0,25421,5645.0,-1223.0
 18,number of reviews,183,476,0.0,15734,1024.0,0.0
-19,last review,15893,2477,6/23/2019,2443,,
+19,last review,15893,2477,2019-06-23 00:00:00,2443,2058-06-16 00:00:00,2012-07-11 00:00:00
 20,reviews per month,15879,1016,0.03,1666,90.0,0.01
 21,review rate number,326,5,5.0,23369,5.0,1.0
 22,calculated host listings count,319,78,1.0,63429,332.0,1.0
