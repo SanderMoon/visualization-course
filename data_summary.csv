@@ -1,27 +1,27 @@
-,Attribute,#_Null,Unique_values,Most_frequent,Count_Most_Freq,Max,Min
-0,id,0,102058,6044940,2,57367417.0,1001254.0
-1,NAME,250,61281,Home away from home,33,,
-2,host id,0,102057,38729751923,2,98763129024.0,123600518.0
-3,host_identity_verified,289,2,unconfirmed,51200,,
-4,host name,406,13190,Michael,881,,
-5,neighbourhood group,29,7,Manhattan,43792,,
-6,neighbourhood,16,224,Bedford-Stuyvesant,7937,,
-7,lat,8,21991,40.76411,36,40.91697,40.49979
-8,long,8,17774,-73.99371,44,-73.70522,-74.24984
-9,country,532,1,United States,102067,,
-10,country code,131,1,US,102468,,
-11,instant_bookable,105,2,False,51474,True,False
-12,cancellation_policy,76,3,moderate,34343,,
-13,room type,0,4,Entire home/apt,53701,Shared room,Entire home/apt
-14,Construction year,214,20,2014.0,5243,2022.0,2003.0
-15,price,247,1151,206.0,137,1200.0,50.0
-16,service fee,273,231,41.0,526,240.0,10.0
-17,minimum nights,409,153,1.0,25421,5645.0,-1223.0
-18,number of reviews,183,476,0.0,15734,1024.0,0.0
-19,last review,15893,2477,2019-06-23 00:00:00,2443,2058-06-16 00:00:00,2012-07-11 00:00:00
-20,reviews per month,15879,1016,0.03,1666,90.0,0.01
-21,review rate number,326,5,5.0,23369,5.0,1.0
-22,calculated host listings count,319,78,1.0,63429,332.0,1.0
-23,availability 365,448,438,0.0,23544,3677.0,-10.0
-24,house_rules,52131,1976,#NAME?,2712,,
-25,license,102597,1,41662/AL,2,,
+,Attribute,#_Null,#_Outlier,Unique_values,Most_frequent,Count_Most_Freq,Max,Min
+0,id,0,0.0,102058,6044940,2,57367417.0,1001254.0
+1,NAME,250,,61281,Home away from home,33,,
+2,host id,0,0.0,102057,38729751923,2,98763129024.0,123600518.0
+3,host_identity_verified,289,,2,unconfirmed,51200,,
+4,host name,406,,13190,Michael,881,,
+5,neighbourhood group,29,,7,Manhattan,43792,,
+6,neighbourhood,16,,224,Bedford-Stuyvesant,7937,,
+7,lat,8,217.0,21991,40.76411,36,40.91697,40.49979
+8,long,8,2745.0,17774,-73.99371,44,-73.70522,-74.24984
+9,country,532,,1,United States,102067,,
+10,country code,131,,1,US,102468,,
+11,instant_bookable,105,0.0,2,False,51474,True,False
+12,cancellation_policy,76,,3,moderate,34343,,
+13,room type,0,,4,Entire home/apt,53701,Shared room,Entire home/apt
+14,Construction year,214,0.0,20,2014.0,5243,2022.0,2003.0
+15,price,247,0.0,1151,206.0,137,1200.0,50.0
+16,service fee,273,0.0,231,41.0,526,240.0,10.0
+17,minimum nights,409,416.0,153,1.0,25421,5645.0,-1223.0
+18,number of reviews,183,2356.0,476,0.0,15734,1024.0,0.0
+19,last review,15893,240.0,2477,2019-06-23 00:00:00,2443,2058-06-16 00:00:00,2012-07-11 00:00:00
+20,reviews per month,15879,1115.0,1016,0.03,1666,90.0,0.01
+21,review rate number,326,0.0,5,5.0,23369,5.0,1.0
+22,calculated host listings count,319,1809.0,78,1.0,63429,332.0,1.0
+23,availability 365,448,1.0,438,0.0,23544,3677.0,-10.0
+24,house_rules,52131,,1976,#NAME?,2712,,
+25,license,102597,,1,41662/AL,2,,
