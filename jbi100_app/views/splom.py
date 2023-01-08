@@ -7,7 +7,6 @@ class Splom(html.Div):
         self.html_id = name.lower().replace(" ", "-")
         self.df = df
         self.features = features
-        print("HI!")
 
         # Equivalent to `html.Div([...])`
         super().__init__(
