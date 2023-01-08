@@ -1,6 +1,7 @@
 from jbi100_app.main import app
 from jbi100_app.views.menu import make_menu_layout
 from jbi100_app.views.scatterplot import Scatterplot
+from jbi100_app.views.splom import Splom
 
 from dash import html
 import plotly.express as px
@@ -14,6 +15,8 @@ if __name__ == '__main__':
     # Instantiate custom views
     scatterplot1 = Scatterplot("Scatterplot 1", 'sepal_length', 'sepal_width', df)
     scatterplot2 = Scatterplot("Scatterplot 2", 'petal_length', 'petal_width', df)
+    features = ["sepal_width", "sepal_length", "petal_width", "petal_length"]
+    splom = Splom("splom", features, df)
 
     app.layout = html.Div(
         id="app-container",
@@ -30,8 +33,7 @@ if __name__ == '__main__':
                 id="right-column",
                 className="nine columns",
                 children=[
-                    scatterplot1,
-                    scatterplot2
+                    splom
                 ],
             ),
         ],
@@ -53,6 +55,14 @@ if __name__ == '__main__':
     ])
     def update_scatter_2(selected_color, selected_data):
         return scatterplot2.update(selected_color, selected_data)
+    
+    @app.callback(
+        Output(splom.html_id, "figure"), [
+        Input("select-color-scatter-1", "value"),
+        Input(splom.html_id, 'selectedData')
+    ])
+    def update_splom(selected_color, selected_data):
+        return splom.update(selected_color, selected_data)
 
 
-    app.run_server(debug=False, dev_tools_ui=False)
+    app.run_server(debug=False, dev_tools_ui=True)
