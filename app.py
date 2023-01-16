@@ -11,14 +11,14 @@ from dash.dependencies import Input, Output
 
 if __name__ == '__main__':
     # Create data
-    df = px.data.iris()
+    df, df_air = px.data.iris()
 
     # Instantiate custom views
     scatterplot1 = Scatterplot("Scatterplot 1", 'sepal_length', 'sepal_width', df)
     scatterplot2 = Scatterplot("Scatterplot 2", 'petal_length', 'petal_width', df)
     features = ["sepal_width", "sepal_length", "petal_width", "petal_length"]
-    splom = Splom("splom", features, df)
-    map = Map("map", df)
+    splom = Splom("splom", features, df_air)
+    map = Map("map", df_air)
 
     app.layout = html.Div(
         id="app-container",
