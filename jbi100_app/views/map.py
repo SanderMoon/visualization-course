@@ -13,6 +13,7 @@ class Map(html.Div):
         self.boroughs = json.load(open("data/boroughs.geojson", "r"))
 
         self.df_agg = self.aggregateData(self.df)
+        print(self.df_agg)
 
         for feature in self.neighbourhoods["features"]:
             if feature["properties"]["neighborhood"] in self.df["neighbourhood"].unique():
@@ -59,15 +60,13 @@ class Map(html.Div):
             geojson=self.neighbourhoods,
             color = self.df_agg["review rate number"],
             locations=self.df_agg["neighbourhood"],
-            color_continuous_scale="viridis",
+            color_continuous_scale="viridis"
         )
 
         self.fig.update_layout(
             mapbox_style = "carto-positron",
-            mapbox_zoom = 6,
+            mapbox_zoom = 8,
             mapbox_center = {"lat": 40.73, "lon":-73.93}                               
         )
-
-
 
         return self.fig
