@@ -1,6 +1,9 @@
 from dash import dcc, html
 from ..config import color_list1, color_list2
 import numpy as np
+from dash import html
+from dash.dependencies import Input, Output
+from jbi100_app.main import app
 
 def generate_header():
     return html.Header(
@@ -30,6 +33,20 @@ def generate_neighbourhood_options(df):
     return neighbourhoods
 
 
+useful_vars = [{"label": "Host identity verified", "value": "host_identity_verified"},
+               {"label": "Neighbourhood group", "value": "neighbourhood group"},
+               {"label": "Instant bookable", "value": "instant_bookable"},
+               {"label": "Cancellation policy", "value": "cancellation_policy"},
+               {"label": "Room type", "value": "room type"},
+               {"label": "Price", "value": "price"},
+               {"label": "Service fee", "value": "service fee"},
+               {"label": "Minimum number of nights", "value": "minimum nights"},
+               {"label": "Number of reviews", "value": "number of reviews"},
+               {"label": "Reviews per month", "value": "reviews per month"},
+               {"label": "Review rate number", "value": "Review rate number"},
+               {"label": "Availability 365", "value": "availability 365"}]
+
+value_index_map = {opt['value']: index for index, opt in enumerate(useful_vars)}
 
 
 def generate_control_card(df):
@@ -75,34 +92,40 @@ def generate_control_card(df):
 
             html.Br(),
 
-            # filters for the splom visualization
-            html.Label("Filters for the Splom visualization: "),
+            # filters for the comparing visualization
+            html.Label("Filters for the third visualization: "),
             html.Hr(),
             html.Label("First variables"),
             dcc.Dropdown(
                 id="first_vars",
-                options=[{
-
-                }],
-                multi=True,
-                value=0
+                options=useful_vars
             ),
 
             html.Label("Second variables"),
             dcc.Dropdown(
                 id="second_vars",
-                options=[{
-                    # same variables
-                }],
-                multi=True,
-                value=0
+                options=useful_vars
             ),
-
+            # html.Button(
+            #     id="submit-button-state",
+            #     children="Compare",
+            #     n_clicks=0
+            # )
 
         ],
     )
 
 
+# Create the chained dropdowns
+@app.callback(
+    Output("second_vars", "options"),
+    Input("first_vars", "value"))
+def update_options_var2(value):
+    useful_vars.pop(value_index_map[value])
+    return useful_vars
+
+
+# Create the header and menu
 def make_header_layout():
     return generate_header()
 

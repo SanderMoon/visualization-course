@@ -4,9 +4,9 @@ from jbi100_app.views.scatterplot import Scatterplot
 from jbi100_app.views.splom import Splom
 from jbi100_app.views.map import Map
 from jbi100_app.views.multiscatter import MultiScatter
-
+from jbi100_app.views.relationship import Relationship
 from dash import html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 from jbi100_app import data
 
 
@@ -16,11 +16,12 @@ if __name__ == '__main__':
     df = data.get_data()
 
     # Instantiate custom views
-    scatterplot1 = Scatterplot("Scatterplot 1", 'sepal_length', 'sepal_width', df)
-    scatterplot2 = Scatterplot("Scatterplot 2", 'petal_length', 'petal_width', df)
-    features = ["sepal_width", "sepal_length", "petal_width", "petal_length"]
-    splom = Splom("splom", features, df)
+    # scatterplot1 = Scatterplot("Scatterplot 1", 'sepal_length', 'sepal_width', df)
+    # scatterplot2 = Scatterplot("Scatterplot 2", 'petal_length', 'petal_width', df)
+    # features = ["sepal_width", "sepal_length", "petal_width", "petal_length"]
+    # splom = Splom("splom", features, df)
     map = Map("map", df)
+    relationship = Relationship("relationship", "price", "number of reviews", df)
     multiscatter = MultiScatter("Multi-scatter", df)
 
     # Create the app
@@ -46,7 +47,9 @@ if __name__ == '__main__':
                 id="right-column",
                 className="nine columns",
                 children=[
-                    splom, map, multiscatter
+                    map,
+                    relationship,
+                    multiscatter
                 ],
             ),
 
@@ -62,30 +65,43 @@ if __name__ == '__main__':
             return map.update()
         filtered_df = df[df["neighbourhood group"] == selected_neighbourhood]
 
-    # Define interactions
     @app.callback(
-        Output(scatterplot1.html_id, "figure"), [
-        Input("select-color-scatter-1", "value"),
-        Input(scatterplot2.html_id, 'selectedData')
-    ])
-    def update_scatter_1(selected_color, selected_data):
-        return scatterplot1.update(selected_color, selected_data)
+        Output(relationship.html_id, "figure"),
+        # Input("submit-button-state", "n_clicks"),
+        Input("first_vars", "value"),
+        Input("second_vars", "value")
+    )
+    def update_relationship_graph(var_1, var_2):
+        # print(n_clicks)
+        # if n_clicks > 0:
+        return relationship.update(var_1, var_2)
 
-    @app.callback(
-        Output(scatterplot2.html_id, "figure"), [
-        Input("select-color-scatter-2", "value"),
-        Input(scatterplot1.html_id, 'selectedData')
-    ])
-    def update_scatter_2(selected_color, selected_data):
-        return scatterplot2.update(selected_color, selected_data)
-    
-    @app.callback(
-        Output(splom.html_id, "figure"), [
-        Input("select-color-scatter-1", "value"),
-        Input(splom.html_id, 'selectedData')
-    ])
-    def update_splom(selected_color, selected_data):
-        return splom.update(selected_color, selected_data)
+
+
+    # Define interactions
+    # @app.callback(
+    #     Output(scatterplot1.html_id, "figure"), [
+    #     Input("select-color-scatter-1", "value"),
+    #     Input(scatterplot2.html_id, 'selectedData')
+    # ])
+    # def update_scatter_1(selected_color, selected_data):
+    #     return scatterplot1.update(selected_color, selected_data)
+    #
+    # @app.callback(
+    #     Output(scatterplot2.html_id, "figure"), [
+    #     Input("select-color-scatter-2", "value"),
+    #     Input(scatterplot1.html_id, 'selectedData')
+    # ])
+    # def update_scatter_2(selected_color, selected_data):
+    #     return scatterplot2.update(selected_color, selected_data)
+    #
+    # @app.callback(
+    #     Output(splom.html_id, "figure"), [
+    #     Input("select-color-scatter-1", "value"),
+    #     Input(splom.html_id, 'selectedData')
+    # ])
+    # def update_splom(selected_color, selected_data):
+    #     return splom.update(selected_color, selected_data)
 
     @app.callback(
         Output(map.html_id, "figure"), [
