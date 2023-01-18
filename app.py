@@ -18,7 +18,7 @@ if __name__ == '__main__':
     scatterplot1 = Scatterplot("Scatterplot 1", 'sepal_length', 'sepal_width', df)
     scatterplot2 = Scatterplot("Scatterplot 2", 'petal_length', 'petal_width', df)
     features = ["sepal_width", "sepal_length", "petal_width", "petal_length"]
-    splom = Splom("splom", features, df_air)
+    splom = Splom("splom", features, df)
     map = Map("map", df_air)
 
     app.layout = html.Div(
@@ -75,4 +75,4 @@ if __name__ == '__main__':
       return map.update()
 
 
-    app.run_server(debug=False, dev_tools_ui=True)
+    app.run_server(debug=True, dev_tools_ui=True)
