@@ -1,4 +1,5 @@
 pandas
 geopandas
 dash
+dash_daq
 sklearn
