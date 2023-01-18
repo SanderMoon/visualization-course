@@ -20,7 +20,6 @@ if __name__ == '__main__':
     map = Map("map", df)
     relationship = Relationship("relationship", "price", "number of reviews", df)
     multiscatter = MultiScatter("Multi-scatter", df)
-    splom = Splom("splom", features, df_iris)
 
     # Create the app
     app.layout = html.Div(
