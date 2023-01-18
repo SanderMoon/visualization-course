@@ -122,6 +122,7 @@ class Relationship(html.Div):
             self.fig.update_layout(barmode='group',
                                    xaxis_title="Number of listings")
 
+
         if self.type_first_var == "categorical" and self.type_second_var == "interval":
             self.fig.add_box(x=self.df[var2], y=self.df[var1])
             self.fig.update_traces(orientation='h')

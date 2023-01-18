@@ -43,7 +43,7 @@ useful_vars = [{"label": "Host identity verified", "value": "host_identity_verif
                {"label": "Minimum number of nights", "value": "minimum nights"},
                {"label": "Number of reviews", "value": "number of reviews"},
                {"label": "Reviews per month", "value": "reviews per month"},
-               {"label": "Review rate number", "value": "Review rate number"},
+               {"label": "Review rate number", "value": "review rate number"},
                {"label": "Availability 365", "value": "availability 365"}]
 
 value_index_map = {opt['value']: index for index, opt in enumerate(useful_vars)}
@@ -92,6 +92,11 @@ def generate_control_card(df):
 
             html.Br(),
 
+            #General variable filters
+            html.Hr(),
+            html.Label("Host identity confirmed"),
+            dcc.RadioItems(["Unconfirmed", "Verified"], style={'padding': 10, 'flex': 1}),
+
             # filters for the comparing visualization
             html.Label("Filters for the third visualization: "),
             html.Hr(),
@@ -114,15 +119,6 @@ def generate_control_card(df):
 
         ],
     )
-
-
-# Create the chained dropdowns
-@app.callback(
-    Output("second_vars", "options"),
-    Input("first_vars", "value"))
-def update_options_var2(value):
-    useful_vars.pop(value_index_map[value])
-    return useful_vars
 
 
 # Create the header and menu
