@@ -5,6 +5,8 @@ from jbi100_app.views.splom import Splom
 from jbi100_app.views.map import Map
 from jbi100_app.views.multiscatter import MultiScatter
 from jbi100_app.views.relationship import Relationship
+import jbi100_app.data as data
+
 from dash import html
 from dash.dependencies import Input, Output, State
 from jbi100_app import data
@@ -12,17 +14,12 @@ from jbi100_app import data
 
 if __name__ == '__main__':
     # Create data
-    # df = px.data.iris()
     df = data.get_data()
 
-    # Instantiate custom views
-    # scatterplot1 = Scatterplot("Scatterplot 1", 'sepal_length', 'sepal_width', df)
-    # scatterplot2 = Scatterplot("Scatterplot 2", 'petal_length', 'petal_width', df)
-    # features = ["sepal_width", "sepal_length", "petal_width", "petal_length"]
-    # splom = Splom("splom", features, df)
     map = Map("map", df)
     relationship = Relationship("relationship", "price", "number of reviews", df)
     multiscatter = MultiScatter("Multi-scatter", df)
+    splom = Splom("splom", features, df_iris)
 
     # Create the app
     app.layout = html.Div(
