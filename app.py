@@ -3,6 +3,7 @@ from jbi100_app.views.menu import make_menu_layout, make_header_layout
 from jbi100_app.views.scatterplot import Scatterplot
 from jbi100_app.views.splom import Splom
 from jbi100_app.views.map import Map
+
 from jbi100_app.views.multiscatter import MultiScatter
 from jbi100_app.views.relationship import Relationship
 import jbi100_app.data as data
