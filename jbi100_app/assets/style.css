@@ -1,6 +1,6 @@
 body {
-    background-color: #f9f9f9;
-    color: #333333;
+    background-color: #EEE2DC;
+    color: #4a4648;
     font-family: "Helvetica Neue", Arial, sans-serif;
     font-size: 15px;
     margin: 0px;
@@ -14,14 +14,21 @@ body {
 }
 
 #right-column {
-    background-color: #f4f4f4;
+    background-color: #EEE2DC;
     padding: 0rem 2rem;
     min-height: 100vh;
+    margin-left: 10px;
 }
 
 h5 {
-    color: #2c8cff;
+    color: #4a4648;
     font-weight: 300;
+}
+
+h1 {
+    margin: 20px 0px;
+    color: #123C69;
+    font-weight: 800;
 }
 
 #intro {
@@ -33,16 +40,28 @@ h5 {
     font-weight: bold;
 }
 
+#control-card {
+background-color: #EDC7B7;
+    border-radius: 0.675rem;
+    padding: 1rem;
+}
+
 .graph_card {
-    background-color: white;
+    background-color: #EDC7B7;
     border-radius: 0.675rem;
     padding: 1rem;
     margin: auto;
     margin-top: 20px;
 }
 
+
+
 .graph_card h6 {
     margin:  0 7px;
     padding-bottom: 7px;
     border-bottom:  1px solid #ccc;
+}
+
+Hr {
+    margin: 5px;
 }
