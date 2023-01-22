@@ -8,7 +8,8 @@ from jbi100_app.views.multiscatter import MultiScatter
 from jbi100_app.views.relationship import Relationship
 import jbi100_app.data as data
 
-from dash import html
+from dash import Dash, html, ctx
+import dash_daq as daq
 from dash.dependencies import Input, Output, State
 from jbi100_app import data
 
@@ -102,10 +103,24 @@ if __name__ == '__main__':
 
     @app.callback(
         Output(map.html_id, "figure"), [
-        Input(map.html_id, "selectedData")
+        Input("boolean_switch", "on"),
+        Input("map_var", "value"),
+        Input(map.html_id, "clickData")
     ])
-    def update_map(selected_data):
-      return map.update()
+    def update_map(on, selected_variable, click_data):
+        return map.update(on, selected_variable, click_data, ctx.triggered_id)
+
+    @app.callback(
+        Output("boolean_switch", "on"), [
+        Input(map.html_id, "clickData")
+        ])
+    def update_switch(click_data):
+        boroughs = ["Bronx", "Brooklyn", "Manhatten", "Queens", "Staten Island"]
+        print(click_data["points"][0]["location"])
+        if click_data["points"][0]["location"] in boroughs:
+            return {"on": True}
+        else:
+            return {"on": False}
 
 
     app.run_server(debug=True, dev_tools_ui=True)
