@@ -4,6 +4,7 @@ import numpy as np
 from dash import html
 from dash.dependencies import Input, Output
 from jbi100_app.main import app
+import dash_daq as daq
 
 def generate_header():
     return html.Header(
@@ -46,6 +47,14 @@ useful_vars = [{"label": "Host identity verified", "value": "host_identity_verif
                {"label": "Review rate number", "value": "review rate number"},
                {"label": "Availability 365", "value": "availability 365"}]
 
+useful_int_vars = [{"label": "Price", "value": "price"},
+               {"label": "Service fee", "value": "service fee"},
+               {"label": "Minimum number of nights", "value": "minimum nights"},
+               {"label": "Number of reviews", "value": "number of reviews"},
+               {"label": "Reviews per month", "value": "reviews per month"},
+               {"label": "Review rate number", "value": "review rate number"},
+               {"label": "Availability 365", "value": "availability 365"}]
+
 value_index_map = {opt['value']: index for index, opt in enumerate(useful_vars)}
 
 
@@ -70,15 +79,6 @@ def generate_control_card(df):
             #     value=color_list2[0],
             # ),
             # html.Br(),
-
-            # Filter for which variable to show on the choropleth
-            html.Br(),
-            html.Label("Choropleth variable", style={"font-weight": "bold"}),
-            dcc.Dropdown(
-                id="choropleth_var",
-                options=["Price", "Service fee", "Rating"],
-                value=0,
-            ),
 
             html.Br(),
 
@@ -156,6 +156,22 @@ def generate_control_card(df):
                 step=1,
                 tooltip={"placement": "top", "always_visible": False}
             ),
+
+            # Graph filters
+            html.Label("Filters for the map visualization"),
+            # Toggle for neighbourhood/borough view
+            html.Hr(),
+            html.Label("Toggle between neighbourhood and borough view"),
+            daq.BooleanSwitch(id="boolean_switch", on=False, color="#123c69"),
+            # Select for different variables
+            html.Br(),
+            html.Label("Variable to visualize on map:"),
+            dcc.Dropdown(
+                id = "map_var",
+                options = useful_int_vars,
+                value = "price"
+            ),
+            
 
             # filters for the comparing visualization
             html.Label("Filters for the third visualization", style={"font-weight": "bold"}),
