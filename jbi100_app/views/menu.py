@@ -71,19 +71,9 @@ def generate_control_card(df):
             # ),
             # html.Br(),
 
-            # Filter for neighborhood groups on map
-            html.Label("Filters for the map visualization"),
-            html.Hr(),
-            html.Label("Neighbourhood group"),
-            dcc.Dropdown(
-                id="neighbourhood_group",
-                options=generate_neighbourhood_options(df),
-                value=generate_neighbourhood_options(df)[0]
-            ),
-
             # Filter for which variable to show on the choropleth
             html.Br(),
-            html.Label("Choropleth variable"),
+            html.Label("Choropleth variable", style={"font-weight": "bold"}),
             dcc.Dropdown(
                 id="choropleth_var",
                 options=["Price", "Service fee", "Rating"],
@@ -94,29 +84,95 @@ def generate_control_card(df):
 
             #General variable filters
             html.Hr(),
-            html.Label("Host identity confirmed"),
-            dcc.RadioItems(["Unconfirmed", "Verified"], style={'padding': 10, 'flex': 1}),
+            html.Label("Host identity verified", style={"font-weight": "bold"}),
+            dcc.Checklist(
+                id="host_id",
+                options=df["host_identity_verified"].unique()
+            ),
+
+            html.Label("Neighbourhood group", style={"font-weight": "bold"}),
+            dcc.Dropdown(
+                id="neighbourhood_group",
+                options=generate_neighbourhood_options(df),
+                value=generate_neighbourhood_options(df)[0],
+                multi=True
+            ),
+
+            html.Label("Instant bookable", style={"font-weight": "bold"}),
+            dcc.Checklist(
+                id="instant_bookable",
+                options=df["instant_bookable"].unique()
+            ),
+
+            html.Label("Cancellation Policy", style={"font-weight": "bold"}),
+            dcc.Checklist(
+                id="cancellation_policy",
+                options=df["cancellation_policy"].unique()
+            ),
+
+            html.Label("Room type", style={"font-weight": "bold"}),
+            dcc.Checklist(
+                id="room_type",
+                options=df["room type"].unique()
+            ),
+
+            html.Label("Price", style={"font-weight": "bold"}),
+            dcc.RangeSlider(
+                id="price",
+                min=df["price"].min(),
+                max=df["price"].max(),
+                tooltip={"placement": "top", "always_visible": False}
+            ),
+
+            html.Label("Service fee", style={"font-weight": "bold"}),
+            dcc.RangeSlider(
+                id="service_fee",
+                min=df["service fee"].min(),
+                max=df["service fee"].max(),
+                tooltip={"placement": "top", "always_visible": False}
+            ),
+
+            html.Label("Minimum number of nights", style={"font-weight": "bold"}),
+            dcc.RangeSlider(
+                id="nr_nights",
+                min=df["minimum nights"].min(),
+                max=df["minimum nights"].max(),
+                tooltip={"placement": "top", "always_visible": False}
+            ),
+
+            html.Label("Number of reviews", style={"font-weight": "bold"}),
+            dcc.RangeSlider(
+                id="nr_reviews",
+                min=df["number of reviews"].min(),
+                max=df["number of reviews"].max(),
+                tooltip={"placement": "top", "always_visible": False}
+            ),
+
+            html.Label("Rating", style={"font-weight": "bold"}),
+            dcc.RangeSlider(
+                id="rating",
+                min=df["review rate number"].min(),
+                max=df["review rate number"].max(),
+                step=1,
+                tooltip={"placement": "top", "always_visible": False}
+            ),
 
             # filters for the comparing visualization
-            html.Label("Filters for the third visualization: "),
+            html.Label("Filters for the third visualization", style={"font-weight": "bold"}),
             html.Hr(),
             html.Label("First variables"),
             dcc.Dropdown(
                 id="first_vars",
-                options=useful_vars
+                options=useful_vars,
+                value=useful_vars[0]["value"]
             ),
 
             html.Label("Second variables"),
             dcc.Dropdown(
                 id="second_vars",
-                options=useful_vars
+                options=useful_vars,
+                value=useful_vars[1]["value"]
             ),
-            # html.Button(
-            #     id="submit-button-state",
-            #     children="Compare",
-            #     n_clicks=0
-            # )
-
         ],
     )
 
