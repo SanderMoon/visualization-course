@@ -37,7 +37,7 @@ h1 {
 }
 
 #control-card label {
-    font-weight: bold;
+    font-weight: normal;
 }
 
 #control-card {
@@ -64,4 +64,9 @@ background-color: #EDC7B7;
 
 Hr {
     margin: 5px;
+    color: "#123c69"
+}
+
+dcc.RangeSlider{
+    background_color = "#123c69"
 }
