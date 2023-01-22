@@ -8,10 +8,9 @@ from jbi100_app.views.multiscatter import MultiScatter
 from jbi100_app.views.relationship import Relationship
 import jbi100_app.data as data
 
-from dash import html
+from dash import html, ctx
 from dash.dependencies import Input, Output, State
 from jbi100_app import data
-
 
 if __name__ == '__main__':
     # Create data
@@ -38,7 +37,6 @@ if __name__ == '__main__':
                 children=make_menu_layout(df)
             ),
 
-
             # Right column
             html.Div(
                 id="right-column",
@@ -53,6 +51,7 @@ if __name__ == '__main__':
         ],
     )
 
+
     @app.callback(
         Output("Map", "figure"),
         Input("neighbourhood_group", "value")
@@ -60,52 +59,37 @@ if __name__ == '__main__':
     def update_map(selected_neighbourhood):
         if selected_neighbourhood == "All":
             return map.update()
-        filtered_df = df[df["neighbourhood group"] == selected_neighbourhood]
+
 
     @app.callback(
         Output(relationship.html_id, "figure"),
-        # Input("submit-button-state", "n_clicks"),
+        Input("host_id", "value"),
+        Input("neighbourhood_group", "value"),
+        Input("instant_bookable", "value"),
+        Input("cancellation_policy", "value"),
+        Input("room_type", "value"),
+        Input("price", "value"),
+        Input("service_fee", "value"),
+        Input("nr_nights", "value"),
+        Input("nr_reviews", "value"),
+        Input("rating", "value"),
         Input("first_vars", "value"),
         Input("second_vars", "value")
     )
-    def update_relationship_graph(var_1, var_2):
-        # print(n_clicks)
-        # if n_clicks > 0:
-        return relationship.update(var_1, var_2)
+    def update_relationship(host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
+                            service_fee, nr_nights, nr_reviews, rating, value1, value2):
 
+        triggered_id = ctx.triggered_id
 
-
-    # Define interactions
-    # @app.callback(
-    #     Output(scatterplot1.html_id, "figure"), [
-    #     Input("select-color-scatter-1", "value"),
-    #     Input(scatterplot2.html_id, 'selectedData')
-    # ])
-    # def update_scatter_1(selected_color, selected_data):
-    #     return scatterplot1.update(selected_color, selected_data)
-    #
-    # @app.callback(
-    #     Output(scatterplot2.html_id, "figure"), [
-    #     Input("select-color-scatter-2", "value"),
-    #     Input(scatterplot1.html_id, 'selectedData')
-    # ])
-    # def update_scatter_2(selected_color, selected_data):
-    #     return scatterplot2.update(selected_color, selected_data)
-    #
-    # @app.callback(
-    #     Output(splom.html_id, "figure"), [
-    #     Input("select-color-scatter-1", "value"),
-    #     Input(splom.html_id, 'selectedData')
-    # ])
-    # def update_splom(selected_color, selected_data):
-    #     return splom.update(selected_color, selected_data)
+        return relationship.update(host_id, neighbourhood_group, instant_bookable, cancellation, room_type,
+                                   price, service_fee, nr_nights, nr_reviews, rating, value1, value2, triggered_id)
 
     @app.callback(
         Output(map.html_id, "figure"), [
-        Input(map.html_id, "selectedData")
-    ])
+            Input(map.html_id, "selectedData")
+        ])
     def update_map(selected_data):
-      return map.update()
+        return map.update()
 
 
     app.run_server(debug=True, dev_tools_ui=True)

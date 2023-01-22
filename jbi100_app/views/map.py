@@ -10,10 +10,9 @@ class Map(html.Div):
         self.html_id = name.lower().replace(" ", "-")
         self.df = df
         self.neighbourhoods = json.load(open("data/neighbourhoods.geojson", "r"))
-        self.boroughs = json.load(open("data/boroughs.geojson", "r"))
 
         self.df_agg = self.aggregateData(self.df)
-        print(self.df_agg)
+        # print(self.df_agg)
 
         for feature in self.neighbourhoods["features"]:
             if feature["properties"]["neighborhood"] in self.df["neighbourhood"].unique():
