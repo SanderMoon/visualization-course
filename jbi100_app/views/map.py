@@ -12,6 +12,8 @@ class Map(html.Div):
         self.neighbourhoods = json.load(open("data/neighbourhoods.geojson", "r"))
         self.boroughs = json.load(open("data/boroughs.geojson", "r"))
 
+        self.hover_vars = ["price", "service fee", "minimum nights", "number of reviews", "review rate number", "availability 365"]
+
         for feature in self.neighbourhoods["features"]:
             if feature["properties"]["neighborhood"] in self.df["neighbourhood"].unique():
                 feature["id"] = feature["properties"]["neighborhood"]
@@ -30,7 +32,7 @@ class Map(html.Div):
         )
 
     def aggregateData(self, df: pd.DataFrame, groupby):
-        aggregatedData = df.groupby(by=groupby, as_index=False).mean(numeric_only=True)
+        aggregatedData = df.groupby(by=groupby, as_index=False).mean(numeric_only=True).round(2)
 
         return aggregatedData
     
@@ -77,7 +79,8 @@ class Map(html.Div):
                     locations= df_processed_neighbourhood["neighbourhood"],
                     color_continuous_scale="greens",
                     width= 1000,
-                    height= 800  
+                    height= 800,
+                    hover_data=self.hover_vars
                 )   
 
         # This runs if the figure is updated by a sidebar filter or on launch
@@ -97,7 +100,8 @@ class Map(html.Div):
                     locations= df_processed_neighbourhood["neighbourhood"],
                     color_continuous_scale="greens",
                     width= 1000,
-                    height= 800  
+                    height= 800,
+                    hover_data=self.hover_vars  
                 )
             else:
                 self.fig = px.choropleth_mapbox(
@@ -108,7 +112,8 @@ class Map(html.Div):
                     locations= df_processed_borough["neighbourhood group"],
                     color_continuous_scale="greens",
                     width= 1000,
-                    height= 800  
+                    height= 800,
+                    hover_data=self.hover_vars  
                 )
 
         self.fig.update_layout(
@@ -117,5 +122,6 @@ class Map(html.Div):
             mapbox_center = {"lat": lat, "lon": long},
             clickmode="event+select"                          
         )
+        # Add more tooltips here
 
         return self.fig
