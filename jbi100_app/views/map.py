@@ -10,6 +10,7 @@ class Map(html.Div):
 
         self.df = df
         self.neighbourhoods = json.load(open("data/neighbourhoods.geojson", "r"))
+        self.boroughs = json.load(open("data/boroughs.geojson", "r"))
 
         self.df_agg_neighbourhood = self.aggregateData(self.df, "neighbourhood")
         self.df_agg_borough = self.aggregateData(self.df, "neighbourhood group")
