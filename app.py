@@ -112,15 +112,28 @@ if __name__ == '__main__':
 
     @app.callback(
         Output("boolean_switch", "on"), [
-        Input(map.html_id, "clickData")
+        Input(map.html_id, "clickData"),
+        Input(relationship.html_id, "selectedData")
         ])
-    def update_switch(click_data):
+    def update_switch(click_data, selected_data):
         boroughs = ["Bronx", "Brooklyn", "Manhatten", "Queens", "Staten Island"]
-        print(click_data["points"][0]["location"])
-        if click_data["points"][0]["location"] in boroughs:
+
+        if click_data != None:
+            if click_data["points"][0]["location"] in boroughs:
+                view = "borough"
+            else:
+                view = "neighbourhood"
+
+        if selected_data != None:
+            if "label" in selected_data["points"][0]:
+                if selected_data["points"][0]["label"] in boroughs:
+                    view = "borough"
+                else:
+                    view = "neighbourhood"
+
+        if view == "borough":
             return {"on": True}
         else:
             return {"on": False}
-
 
     app.run_server(debug=True, dev_tools_ui=True)
