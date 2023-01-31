@@ -100,12 +100,15 @@ if __name__ == '__main__':
         Input("nr_nights", "value"),
         Input("nr_reviews", "value"),
         Input("rating", "value"),
-        Input(map.html_id, "clickData")
+        Input(map.html_id, "clickData"),
+        Input(relationship.html_id, "selectedData"),
+        Input("first_vars", "value"),
+        Input("second_vars", "value")
     ])
     def update_map(on, selected_variable, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
-                            service_fee, nr_nights, nr_reviews, rating, click_data):
+                            service_fee, nr_nights, nr_reviews, rating, click_data, selected_data, relationship_first, relationship_second):
         return map.update(on, selected_variable, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
-                            service_fee, nr_nights, nr_reviews, rating, click_data, ctx.triggered_id)
+                            service_fee, nr_nights, nr_reviews, rating, click_data, selected_data, relationship_first, relationship_second, ctx.triggered_id)
 
     @app.callback(
         Output("boolean_switch", "on"), [
