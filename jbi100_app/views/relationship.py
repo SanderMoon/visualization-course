@@ -129,5 +129,7 @@ class Relationship(html.Div):
                 xaxis_title=var1,
                 yaxis_title=var2,
             )
+        
+        self.fig.update_layout(clickmode = "event+select")
 
         return self.fig

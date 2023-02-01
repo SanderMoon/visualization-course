@@ -14,7 +14,7 @@ def get_data():
     return df
 
 
-def filter_data(df, list):
+def filter_data(df, list) -> pd.DataFrame:
     variables = ["host_identity_verified", "neighbourhood group", "instant_bookable", "cancellation_policy",
                  "room type", "price", "service fee", "minimum nights", "number of reviews", "review rate number"]
     if list[1] == "All":
