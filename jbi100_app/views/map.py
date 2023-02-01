@@ -2,18 +2,17 @@ from dash import dcc, html
 import plotly.express as px
 import json
 import pandas as pd
+from jbi100_app import data
 
 class Map(html.Div):
     def __init__(self, name, df: pd.DataFrame):
         self.html_id = name.lower().replace(" ", "-")
-        self.view = "borough"
 
         self.df = df
         self.neighbourhoods = json.load(open("data/neighbourhoods.geojson", "r"))
         self.boroughs = json.load(open("data/boroughs.geojson", "r"))
 
-        self.df_agg_neighbourhood = self.aggregateData(self.df, "neighbourhood")
-        self.df_agg_borough = self.aggregateData(self.df, "neighbourhood group")
+        self.hover_vars = ["price", "service fee", "minimum nights", "number of reviews", "review rate number", "availability 365"]
 
         for feature in self.neighbourhoods["features"]:
             if feature["properties"]["neighborhood"] in self.df["neighbourhood"].unique():
@@ -33,7 +32,7 @@ class Map(html.Div):
         )
 
     def aggregateData(self, df: pd.DataFrame, groupby):
-        aggregatedData = df.groupby(by=groupby, as_index=False).mean()
+        aggregatedData = df.groupby(by=groupby, as_index=False).mean(numeric_only=True).round(2)
 
         return aggregatedData
     
@@ -53,70 +52,76 @@ class Map(html.Div):
 
         return smallPolygon
     
-    def update(self, on, selected_variable, click_data, triggered_id):
+    def update(self, on, selected_variable, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
+                            service_fee, nr_nights, nr_reviews, rating, click_data, triggered_id):
+        
+        df_processed = data.filter_data(self.df, [host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
+                            service_fee, nr_nights, nr_reviews, rating])
+        df_processed_borough = self.aggregateData(df_processed, "neighbourhood group")
         
         # This runs if the figure is updated because of a click in the figure
         if triggered_id == "map":
-            source = "borough" if click_data["points"][0]["location"] in ["Bronx", "Brooklyn", "Manhatten", "Queens", "Staten Island"] else "neighbourhood"
+            source = "borough" if click_data["points"][0]["location"] in ["Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"] else "neighbourhood"
+            zoom = 10
 
             if source == "borough":
-                print(source)
                 borough = click_data["points"][0]["location"]
+                df_processed_new = df_processed.loc[df_processed["neighbourhood group"] == borough]
+                df_processed_neighbourhood = self.aggregateData(df_processed_new, "neighbourhood")
+                lat = df_processed_neighbourhood["lat"].mean()
+                long = df_processed_neighbourhood["long"].mean()
+
                 self.fig = px.choropleth_mapbox(
-                    self.df_agg_neighbourhood,
+                    df_processed_neighbourhood,
                     featureidkey = "properties.neighborhood",
                     geojson=self.neighbourhoods,
-                    color = self.df_agg_neighbourhood[selected_variable],
-                    locations=self.df_agg_neighbourhood["neighbourhood"],
+                    color = df_processed_neighbourhood[selected_variable],
+                    locations= df_processed_neighbourhood["neighbourhood"],
                     color_continuous_scale="greens",
                     width= 1000,
-                    height= 800  
+                    height= 800,
+                    hover_data=self.hover_vars
                 )   
 
-        # This runs if the figure is updated by a sidebar filter
-        elif triggered_id == "boolean_switch" or triggered_id == "map_var":
+        # This runs if the figure is updated by a sidebar filter or on launch
+        else:
+            lat = 40.73
+            long = -73.93
+            zoom = 9
 
             if on:
+                df_processed_neighbourhood = self.aggregateData(df_processed, "neighbourhood")
+
                 self.fig = px.choropleth_mapbox(
-                    self.df_agg_neighbourhood,
+                    df_processed_neighbourhood,
                     featureidkey = "properties.neighborhood",
                     geojson=self.neighbourhoods,
-                    color = self.df_agg_neighbourhood[selected_variable],
-                    locations=self.df_agg_neighbourhood["neighbourhood"],
+                    color = df_processed_neighbourhood[selected_variable],
+                    locations= df_processed_neighbourhood["neighbourhood"],
                     color_continuous_scale="greens",
                     width= 1000,
-                    height= 800  
+                    height= 800,
+                    hover_data=self.hover_vars  
                 )
             else:
                 self.fig = px.choropleth_mapbox(
-                    self.df_agg_borough,
+                    df_processed_borough,
                     featureidkey = "properties.boro_name",
                     geojson=self.boroughs,
-                    color = self.df_agg_borough[selected_variable],
-                    locations=self.df_agg_borough["neighbourhood group"],
+                    color = df_processed_borough[selected_variable],
+                    locations= df_processed_borough["neighbourhood group"],
                     color_continuous_scale="greens",
                     width= 1000,
-                    height= 800  
+                    height= 800,
+                    hover_data=self.hover_vars  
                 )
-
-        # This runs on launch
-        else: 
-            self.fig = px.choropleth_mapbox(
-                self.df_agg_borough,
-                featureidkey = "properties.boro_name",
-                geojson=self.boroughs,
-                color = self.df_agg_borough[selected_variable],
-                locations=self.df_agg_borough["neighbourhood group"],
-                color_continuous_scale="greens",
-                width= 1000,
-                height= 800  
-            )
 
         self.fig.update_layout(
             mapbox_style = "carto-positron",
-            mapbox_zoom = 9,
-            mapbox_center = {"lat": 40.73, "lon":-73.93},
+            mapbox_zoom = zoom,
+            mapbox_center = {"lat": lat, "lon": long},
             clickmode="event+select"                          
         )
+        # Add more tooltips here
 
         return self.fig

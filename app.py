@@ -3,9 +3,11 @@ from jbi100_app.views.menu import make_menu_layout, make_header_layout
 from jbi100_app.views.scatterplot import Scatterplot
 from jbi100_app.views.splom import Splom
 from jbi100_app.views.map import Map
-
+from jbi100_app.views.distribution import Distribution
 from jbi100_app.views.multiscatter import MultiScatter
 from jbi100_app.views.relationship import Relationship
+
+
 import jbi100_app.data as data
 
 from dash import Dash, html, ctx
@@ -19,6 +21,7 @@ if __name__ == '__main__':
     df = data.get_data()
 
     map = Map("map", df)
+    distribution = Distribution("Distribution", df)
     relationship = Relationship("relationship", "price", "number of reviews", df)
     multiscatter = MultiScatter("Multi-scatter", df)
 
@@ -45,6 +48,7 @@ if __name__ == '__main__':
                 className="nine columns",
                 children=[
                     map,
+                    distribution,
                     relationship,
                     multiscatter
                 ],
@@ -90,10 +94,41 @@ if __name__ == '__main__':
         Output(map.html_id, "figure"), [
         Input("boolean_switch", "on"),
         Input("map_var", "value"),
+        Input("host_id", "value"),
+        Input("neighbourhood_group", "value"),
+        Input("instant_bookable", "value"),
+        Input("cancellation_policy", "value"),
+        Input("room_type", "value"),
+        Input("price", "value"),
+        Input("service_fee", "value"),
+        Input("nr_nights", "value"),
+        Input("nr_reviews", "value"),
+        Input("rating", "value"),
         Input(map.html_id, "clickData")
     ])
-    def update_map(on, selected_variable, click_data):
-        return map.update(on, selected_variable, click_data, ctx.triggered_id)
+    def update_map(on, selected_variable, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
+                            service_fee, nr_nights, nr_reviews, rating, click_data):
+        return map.update(on, selected_variable, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
+                            service_fee, nr_nights, nr_reviews, rating, click_data, ctx.triggered_id)
+
+    @app.callback(
+        Output(distribution.html_id, "figure"),
+        Input("map_var", "value"),
+        Input("host_id", "value"),
+        Input("neighbourhood_group", "value"),
+        Input("instant_bookable", "value"),
+        Input("cancellation_policy", "value"),
+        Input("room_type", "value"),
+        Input("price", "value"),
+        Input("service_fee", "value"),
+        Input("nr_nights", "value"),
+        Input("nr_reviews", "value"),
+        Input("rating", "value")
+    )
+    def update_distribution(xvar, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
+                            service_fee, nr_nights, nr_reviews, rating):
+        return distribution.update(xvar, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
+                            service_fee, nr_nights, nr_reviews, rating)
 
     @app.callback(
         Output("boolean_switch", "on"), [
