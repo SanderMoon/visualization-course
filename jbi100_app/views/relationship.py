@@ -28,9 +28,15 @@ class Relationship(html.Div):
         )
 
     def update(self, host_id, neighbourhood_group, instant_bookable, cancellation, room_type,
-               price, service_fee, nr_nights, nr_reviews, rating, var1, var2, triggered_id):
+               price, service_fee, nr_nights, nr_reviews, rating, var1, var2, click_data, triggered_id):
 
         if triggered_id != "first_vars" or triggered_id != "second_vars":
+
+            if triggered_id == "map":
+                boroughs = ["Bronx", "Brooklyn", "Manhatten", "Queens", "Staten Island"]
+                if click_data["points"][0]["location"] in boroughs:
+                    neighbourhood_group = [click_data["points"][0]["location"]]
+
             list = [host_id, neighbourhood_group, instant_bookable, cancellation, room_type,
                     price, service_fee, nr_nights, nr_reviews, rating]
             filtered_df = data.filter_data(self.df, list)

@@ -12,6 +12,8 @@ class Map(html.Div):
         self.neighbourhoods = json.load(open("data/neighbourhoods.geojson", "r"))
         self.boroughs = json.load(open("data/boroughs.geojson", "r"))
 
+        self.relationship_var = "neighbourhood group"
+
         self.hover_vars = ["price", "service fee", "minimum nights", "number of reviews", "review rate number", "availability 365"]
 
         for feature in self.neighbourhoods["features"]:
@@ -53,15 +55,64 @@ class Map(html.Div):
         return smallPolygon
     
     def update(self, on, selected_variable, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
-                            service_fee, nr_nights, nr_reviews, rating, click_data, selected_data, relationship_first, relationship_second, triggered_id):
+                            service_fee, nr_nights, nr_reviews, rating, click_data, selected_data_relationship, selected_data_dist, 
+                            relationship_first, relationship_second, triggered_id):
         
         df_processed = data.filter_data(self.df, [host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
                             service_fee, nr_nights, nr_reviews, rating])
         
+        lat = 40.73
+        long = -73.93
+
+
+        # This runs if the relationship y_var is updated
+        if triggered_id == "second_vars":
+            self.relationship_var = relationship_second
+
+        # This runs if the figure is updated because of a click in the distribution graph
+        if triggered_id == "distribution":
+
+            lat = 40.73
+            long = -73.93
+            zoom = 9
+            point_indices = []
+            for point in selected_data_dist["points"]:
+                point_indices += point["pointNumbers"]
+            
+            filtered_df = df_processed.filter(items=point_indices, axis=0)
+
+            if on:
+                df_processed_neighbourhood = self.aggregateData(filtered_df, "neighbourhood")
+
+                self.fig = px.choropleth_mapbox(
+                    df_processed_neighbourhood,
+                    featureidkey = "properties.neighborhood",
+                    geojson=self.neighbourhoods,
+                    color = df_processed_neighbourhood[selected_variable],
+                    locations= df_processed_neighbourhood["neighbourhood"],
+                    color_continuous_scale="greens",
+                    width= 1000,
+                    height= 800,
+                    hover_data=self.hover_vars  
+                )
+            else:
+                df_processed_borough = self.aggregateData(filtered_df, "neighbourhood group")
+                self.fig = px.choropleth_mapbox(
+                    df_processed_borough,
+                    featureidkey = "properties.boro_name",
+                    geojson=self.boroughs,
+                    color = df_processed_borough[selected_variable],
+                    locations= df_processed_borough["neighbourhood group"],
+                    color_continuous_scale="greens",
+                    width= 1000,
+                    height= 800,
+                    hover_data=self.hover_vars  
+                )
+
         # This runs if the figure is updated because of a click in the relationship graph
-        if triggered_id == "relationship":
+        elif triggered_id == "relationship":
             # Check what type of graph relationship currently is
-            if "label" in selected_data["points"][0]:
+            if "label" in selected_data_relationship["points"][0]:
                 graph_type = "bar"
             else:
                 graph_type = "scatter"
@@ -72,7 +123,7 @@ class Map(html.Div):
                 long = -73.93
                 zoom = 9
                 point_indices = []
-                for point in selected_data["points"]:
+                for point in selected_data_relationship["points"]:
                     point_indices.append(point["pointIndex"])
                 
                 filtered_df = df_processed.filter(items= point_indices, axis=0)
@@ -108,24 +159,57 @@ class Map(html.Div):
 
             # Update map if relationship graph is a bar chart
             if graph_type == "bar":
-                borough = selected_data["points"][0]["label"]
+                value = selected_data_relationship["points"][0]["label"]
                 zoom = 10
-                df_processed_new = df_processed.loc[df_processed["neighbourhood group"] == borough]
-                df_processed_neighbourhood = self.aggregateData(df_processed_new, "neighbourhood")
-                lat = df_processed_neighbourhood["lat"].mean()
-                long = df_processed_neighbourhood["long"].mean()
+                df_processed_new = df_processed.loc[df_processed[self.relationship_var] == value]
 
-                self.fig = px.choropleth_mapbox(
-                    df_processed_neighbourhood,
-                    featureidkey = "properties.neighborhood",
-                    geojson=self.neighbourhoods,
-                    color = df_processed_neighbourhood[selected_variable],
-                    locations= df_processed_neighbourhood["neighbourhood"],
-                    color_continuous_scale="greens",
-                    width= 1000,
-                    height= 800,
-                    hover_data=self.hover_vars
-                )
+                if self.relationship_var == "neighbourhood group":
+                    df_processed_neighbourhood = self.aggregateData(df_processed_new, "neighbourhood")
+                    lat = df_processed_neighbourhood["lat"].mean()
+                    long = df_processed_neighbourhood["long"].mean()
+                    self.fig = px.choropleth_mapbox(
+                        df_processed_neighbourhood,
+                        featureidkey = "properties.neighborhood",
+                        geojson=self.neighbourhoods,
+                        color = df_processed_neighbourhood[selected_variable],
+                        locations= df_processed_neighbourhood["neighbourhood"],
+                        color_continuous_scale="greens",
+                        width= 1000,
+                        height= 800,
+                        hover_data=self.hover_vars
+                    )
+                
+                else:
+                    if on:
+                        df_processed_neighbourhood = self.aggregateData(df_processed, "neighbourhood")
+                        lat = df_processed_neighbourhood["lat"].mean()
+                        long = df_processed_neighbourhood["long"].mean()
+                        self.fig = px.choropleth_mapbox(
+                            df_processed_neighbourhood,
+                            featureidkey = "properties.neighborhood",
+                            geojson=self.neighbourhoods,
+                            color = df_processed_neighbourhood[selected_variable],
+                            locations= df_processed_neighbourhood["neighbourhood"],
+                            color_continuous_scale="greens",
+                            width= 1000,
+                            height= 800,
+                            hover_data=self.hover_vars
+                        )
+                    else:
+                        df_processed_borough = self.aggregateData(df_processed, "neighbourhood group")
+                        lat = df_processed_neighbourhood["lat"].mean()
+                        long = df_processed_neighbourhood["long"].mean()
+                        self.fig = px.choropleth_mapbox(
+                            df_processed_borough,
+                            featureidkey = "properties.boro_name",
+                            geojson=self.boroughs,
+                            color = df_processed_borough[selected_variable],
+                            locations= df_processed_borough["neighbourhood group"],
+                            color_continuous_scale="greens",
+                            width= 1000,
+                            height= 800,
+                            hover_data=self.hover_vars  
+                        )
 
         # This runs if the figure is updated because of a click in the figure
         elif triggered_id == "map":
@@ -149,7 +233,7 @@ class Map(html.Div):
                     width= 1000,
                     height= 800,
                     hover_data=self.hover_vars
-                )   
+                )
 
         # This runs if the figure is updated by a sidebar filter or on launch
         else:
@@ -169,7 +253,7 @@ class Map(html.Div):
                     color_continuous_scale="greens",
                     width= 1000,
                     height= 800,
-                    hover_data=self.hover_vars  
+                    hover_data=self.hover_vars
                 )
             else:
                 df_processed_borough = self.aggregateData(df_processed, "neighbourhood group")
