@@ -43,7 +43,7 @@ class Map(html.Div):
     # This runs on launch and whenever a callback is triggered for the map
     def update(self, on, selected_variable, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
                             service_fee, nr_nights, nr_reviews, rating, click_data, selected_data_relationship, selected_data_dist, 
-                            relationship_first, relationship_second, triggered_id):
+                            relationship_second, triggered_id):
         
         # Filters the data based on which filter is used
         df_processed = data.filter_data(self.df, [host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
