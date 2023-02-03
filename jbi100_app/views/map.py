@@ -18,7 +18,7 @@ class Map(html.Div):
         self.relationship_var = "neighbourhood group"
 
         # Variables to show on hover
-        self.hover_vars = ["price", "service fee", "minimum nights", "number of reviews", "review rate number", "availability 365"]
+        self.hover_vars = ["price", "service fee", "minimum nights", "number of reviews", "review rate number", "availability 365", "number of listings"]
 
         # Add an id item to the neighbourhoods to connect datasets
         for feature in self.neighbourhoods["features"]:
@@ -37,6 +37,7 @@ class Map(html.Div):
     # Function that aggregates the data either on neighbourhood or borough level
     def aggregateData(self, df: pd.DataFrame, groupby):
         aggregatedData = df.groupby(by=groupby, as_index=False).mean(numeric_only=True).round(2)
+        aggregatedData["number of listings"] = df.groupby(by=groupby, as_index=False).count()["Unnamed: 0"]
 
         return aggregatedData
     

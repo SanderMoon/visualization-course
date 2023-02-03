@@ -130,7 +130,6 @@ if __name__ == '__main__':
         ])
     def update_switch(click_data, selected_data):
         boroughs = ["Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"]
-        view = "borough"
 
         # Checks if a borough was clicked
         if click_data is not None:
@@ -152,4 +151,4 @@ if __name__ == '__main__':
         else:
             return {"on": True}
 
-    app.run_server(debug=True, dev_tools_ui=True)
+    app.run_server(debug=False, dev_tools_ui=False)
