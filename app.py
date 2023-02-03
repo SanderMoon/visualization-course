@@ -80,15 +80,16 @@ if __name__ == '__main__':
         Input("nr_reviews", "value"),
         Input("rating", "value"),
         Input("first_vars", "value"),
-        Input("second_vars", "value")
+        Input("second_vars", "value"),
+        Input(map.html_id, "clickData")
     )
     def update_relationship(host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
-                            service_fee, nr_nights, nr_reviews, rating, value1, value2):
+                            service_fee, nr_nights, nr_reviews, rating, value1, value2, click_data):
 
         triggered_id = ctx.triggered_id
 
         return relationship.update(host_id, neighbourhood_group, instant_bookable, cancellation, room_type,
-                                   price, service_fee, nr_nights, nr_reviews, rating, value1, value2, triggered_id)
+                                   price, service_fee, nr_nights, nr_reviews, rating, value1, value2, click_data, triggered_id)
 
     @app.callback(
         Output(map.html_id, "figure"), [
@@ -106,13 +107,16 @@ if __name__ == '__main__':
         Input("rating", "value"),
         Input(map.html_id, "clickData"),
         Input(relationship.html_id, "selectedData"),
+        Input(distribution.html_id, "selectedData"),
         Input("first_vars", "value"),
         Input("second_vars", "value")
     ])
     def update_map(on, selected_variable, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
-                            service_fee, nr_nights, nr_reviews, rating, click_data, selected_data, relationship_first, relationship_second):
+                            service_fee, nr_nights, nr_reviews, rating, click_data, selected_data_relationship, selected_data_dist, 
+                            relationship_first, relationship_second):
         return map.update(on, selected_variable, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
-                            service_fee, nr_nights, nr_reviews, rating, click_data, selected_data, relationship_first, relationship_second, ctx.triggered_id)
+                            service_fee, nr_nights, nr_reviews, rating, click_data, selected_data_relationship, selected_data_dist, 
+                            relationship_first, relationship_second, ctx.triggered_id)
 
     @app.callback(
         Output(distribution.html_id, "figure"),
@@ -126,12 +130,29 @@ if __name__ == '__main__':
         Input("service_fee", "value"),
         Input("nr_nights", "value"),
         Input("nr_reviews", "value"),
-        Input("rating", "value")
+        Input("rating", "value"),
+        Input(map.html_id, "clickData")
     )
     def update_distribution(xvar, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
-                            service_fee, nr_nights, nr_reviews, rating):
+                            service_fee, nr_nights, nr_reviews, rating, click_data):
         return distribution.update(xvar, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
-                            service_fee, nr_nights, nr_reviews, rating)
+                            service_fee, nr_nights, nr_reviews, rating, click_data, ctx.triggered_id)
+
+    # @app.callback(
+    #     Output("neighbourhood_group", "value"), [
+    #     Input(map.html_id, "clickData"),
+    #     Input(relationship.html_id, "selectedData")
+    #     ])
+    # def update_select(click_data, selected_data):
+    #     boroughs = ["Bronx", "Brooklyn", "Manhatten", "Queens", "Staten Island"]
+
+    #     if click_data != None:
+    #         if click_data["points"][0]["location"] in boroughs:
+    #             return [click_data["points"][0]["location"], 0]
+
+    #     if selected_data != None:
+    #         print(selected_data)
+        
 
     @app.callback(
         Output("boolean_switch", "on"), [
@@ -148,15 +169,14 @@ if __name__ == '__main__':
                 view = "neighbourhood"
 
         if selected_data != None:
-            if "label" in selected_data["points"][0]:
-                if selected_data["points"][0]["label"] in boroughs:
-                    view = "borough"
-                else:
+            view = "borough"
+            if map.relationship_var == "neighbourhood group":
+                if selected_data["points"][0]["label"] not in boroughs:
                     view = "neighbourhood"
 
         if view == "borough":
-            return {"on": True}
-        else:
             return {"on": False}
+        else:
+            return {"on": True}
 
     app.run_server(debug=True, dev_tools_ui=True)

@@ -24,10 +24,21 @@ class Distribution(html.Div):
         )
 
     def update(self, xvar, host_id, neighbourhood_group, instant_bookable, cancellation, room_type, price,
-                            service_fee, nr_nights, nr_reviews, rating):
+                            service_fee, nr_nights, nr_reviews, rating, click_data, triggered_id):
 
         self.fig = go.Figure()
-        df_processed = data.filter_data(self.df, [host_id, neighbourhood_group, instant_bookable, cancellation,
+
+        if triggered_id == "map":
+            boroughs = ["Bronx", "Brooklyn", "Manhatten", "Queens", "Staten Island"]
+            if click_data["points"][0]["location"] in boroughs:
+                neighbourhood_group = [click_data["points"][0]["location"]]
+                df_processed = data.filter_data(self.df, [host_id, neighbourhood_group, instant_bookable, cancellation,
+                                                  room_type, price, service_fee, nr_nights, nr_reviews, rating])
+            else:
+                df_processed = self.df.loc[self.df["neighbourhood"] == click_data["points"][0]["location"]]
+
+        else:
+            df_processed = data.filter_data(self.df, [host_id, neighbourhood_group, instant_bookable, cancellation,
                                                   room_type, price, service_fee, nr_nights, nr_reviews, rating])
 
         self.train, self.test = train_test_split(df_processed, test_size=0.5)
@@ -47,7 +58,8 @@ class Distribution(html.Div):
 
         self.fig.update_layout(
             xaxis_title=xvar,
-            yaxis_title="Percentage of cases"
+            yaxis_title="Percentage of cases",
+            clickmode="event+select"
         )
 
         self.fig.update_traces(
