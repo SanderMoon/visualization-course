@@ -4,6 +4,7 @@ import json
 import pandas as pd
 from jbi100_app import data
 
+
 class Map(html.Div):
     def __init__(self, name, df: pd.DataFrame):
         self.html_id = name.lower().replace(" ", "-")
@@ -81,14 +82,14 @@ class Map(html.Div):
                 # Plot the map
                 self.fig = px.choropleth_mapbox(
                     df_processed_neighbourhood,
-                    featureidkey = "properties.neighborhood",
+                    featureidkey="properties.neighborhood",
                     geojson=self.neighbourhoods,
-                    color = df_processed_neighbourhood[selected_variable],
-                    locations= df_processed_neighbourhood["neighbourhood"],
+                    color=df_processed_neighbourhood[selected_variable],
+                    locations=df_processed_neighbourhood["neighbourhood"],
                     color_continuous_scale="greens",
-                    width= 1000,
-                    height= 800,
-                    hover_data=self.hover_vars  
+                    width=1000,
+                    height=800,
+                    hover_data=self.hover_vars
                 )
 
             # If we are in borough view
@@ -100,14 +101,14 @@ class Map(html.Div):
                 # Plot the map
                 self.fig = px.choropleth_mapbox(
                     df_processed_borough,
-                    featureidkey = "properties.boro_name",
+                    featureidkey="properties.boro_name",
                     geojson=self.boroughs,
-                    color = df_processed_borough[selected_variable],
-                    locations= df_processed_borough["neighbourhood group"],
+                    color=df_processed_borough[selected_variable],
+                    locations=df_processed_borough["neighbourhood group"],
                     color_continuous_scale="greens",
-                    width= 1000,
-                    height= 800,
-                    hover_data=self.hover_vars  
+                    width=1000,
+                    height=800,
+                    hover_data=self.hover_vars
                 )
 
         # This runs if the figure is updated because of a click in the relationship graph
@@ -142,14 +143,14 @@ class Map(html.Div):
                     # Plot the map
                     self.fig = px.choropleth_mapbox(
                         df_processed_neighbourhood,
-                        featureidkey = "properties.neighborhood",
+                        featureidkey="properties.neighborhood",
                         geojson=self.neighbourhoods,
-                        color = df_processed_neighbourhood[selected_variable],
-                        locations= df_processed_neighbourhood["neighbourhood"],
+                        color=df_processed_neighbourhood[selected_variable],
+                        locations=df_processed_neighbourhood["neighbourhood"],
                         color_continuous_scale="greens",
-                        width= 1000,
-                        height= 800,
-                        hover_data=self.hover_vars  
+                        width=1000,
+                        height=800,
+                        hover_data=self.hover_vars
                     )
 
                 # If we are in borough view
@@ -161,16 +162,15 @@ class Map(html.Div):
                     # Plot the map
                     self.fig = px.choropleth_mapbox(
                         df_processed_borough,
-                        featureidkey = "properties.boro_name",
+                        featureidkey="properties.boro_name",
                         geojson=self.boroughs,
-                        color = df_processed_borough[selected_variable],
-                        locations= df_processed_borough["neighbourhood group"],
+                        color=df_processed_borough[selected_variable],
+                        locations=df_processed_borough["neighbourhood group"],
                         color_continuous_scale="greens",
-                        width= 1000,
-                        height= 800,
-                        hover_data=self.hover_vars  
+                        width=1000,
+                        height=800,
+                        hover_data=self.hover_vars
                     )
-            
 
             # Update map if relationship graph is a bar chart
             if graph_type == "bar":
@@ -195,13 +195,13 @@ class Map(html.Div):
                     # Plot the map
                     self.fig = px.choropleth_mapbox(
                         df_processed_neighbourhood,
-                        featureidkey = "properties.neighborhood",
+                        featureidkey="properties.neighborhood",
                         geojson=self.neighbourhoods,
-                        color = df_processed_neighbourhood[selected_variable],
-                        locations= df_processed_neighbourhood["neighbourhood"],
+                        color=df_processed_neighbourhood[selected_variable],
+                        locations=df_processed_neighbourhood["neighbourhood"],
                         color_continuous_scale="greens",
-                        width= 1000,
-                        height= 800,
+                        width=1000,
+                        height=800,
                         hover_data=self.hover_vars
                     )
                 
@@ -219,13 +219,13 @@ class Map(html.Div):
                         # Plot the map
                         self.fig = px.choropleth_mapbox(
                             df_processed_neighbourhood,
-                            featureidkey = "properties.neighborhood",
+                            featureidkey="properties.neighborhood",
                             geojson=self.neighbourhoods,
-                            color = df_processed_neighbourhood[selected_variable],
-                            locations= df_processed_neighbourhood["neighbourhood"],
+                            color=df_processed_neighbourhood[selected_variable],
+                            locations=df_processed_neighbourhood["neighbourhood"],
                             color_continuous_scale="greens",
-                            width= 1000,
-                            height= 800,
+                            width=1000,
+                            height=800,
                             hover_data=self.hover_vars
                         )
                     
@@ -240,14 +240,14 @@ class Map(html.Div):
                         # Plot the map
                         self.fig = px.choropleth_mapbox(
                             df_processed_borough,
-                            featureidkey = "properties.boro_name",
+                            featureidkey="properties.boro_name",
                             geojson=self.boroughs,
-                            color = df_processed_borough[selected_variable],
-                            locations= df_processed_borough["neighbourhood group"],
+                            color=df_processed_borough[selected_variable],
+                            locations=df_processed_borough["neighbourhood group"],
                             color_continuous_scale="greens",
-                            width= 1000,
-                            height= 800,
-                            hover_data=self.hover_vars  
+                            width=1000,
+                            height=800,
+                            hover_data=self.hover_vars
                         )
 
         # This runs if the figure is updated because of a click in the figure
@@ -272,13 +272,13 @@ class Map(html.Div):
                 # Plot the map
                 self.fig = px.choropleth_mapbox(
                     df_processed_neighbourhood,
-                    featureidkey = "properties.neighborhood",
+                    featureidkey="properties.neighborhood",
                     geojson=self.neighbourhoods,
-                    color = df_processed_neighbourhood[selected_variable],
-                    locations= df_processed_neighbourhood["neighbourhood"],
+                    color=df_processed_neighbourhood[selected_variable],
+                    locations=df_processed_neighbourhood["neighbourhood"],
                     color_continuous_scale="greens",
-                    width= 1000,
-                    height= 800,
+                    width=1000,
+                    height=800,
                     hover_data=self.hover_vars
                 )
 
@@ -297,13 +297,13 @@ class Map(html.Div):
                 # Plot the map
                 self.fig = px.choropleth_mapbox(
                     df_processed_neighbourhood,
-                    featureidkey = "properties.neighborhood",
+                    featureidkey="properties.neighborhood",
                     geojson=self.neighbourhoods,
-                    color = df_processed_neighbourhood[selected_variable],
-                    locations= df_processed_neighbourhood["neighbourhood"],
+                    color=df_processed_neighbourhood[selected_variable],
+                    locations=df_processed_neighbourhood["neighbourhood"],
                     color_continuous_scale="greens",
-                    width= 1000,
-                    height= 800,
+                    width=1000,
+                    height=800,
                     hover_data=self.hover_vars
                 )
             # If we are in borough view
@@ -315,22 +315,22 @@ class Map(html.Div):
                 # Plot the map
                 self.fig = px.choropleth_mapbox(
                     df_processed_borough,
-                    featureidkey = "properties.boro_name",
+                    featureidkey="properties.boro_name",
                     geojson=self.boroughs,
-                    color = df_processed_borough[selected_variable],
-                    locations= df_processed_borough["neighbourhood group"],
+                    color=df_processed_borough[selected_variable],
+                    locations=df_processed_borough["neighbourhood group"],
                     color_continuous_scale="greens",
-                    width= 1000,
-                    height= 800,
-                    hover_data=self.hover_vars  
+                    width=1000,
+                    height=800,
+                    hover_data=self.hover_vars
                 )
 
         # Update the layout
         self.fig.update_layout(
-            mapbox_style = "carto-positron",
-            mapbox_zoom = zoom,
-            mapbox_center = {"lat": lat, "lon": long},
-            clickmode="event+select"                          
+            mapbox_style="carto-positron",
+            mapbox_zoom=zoom,
+            mapbox_center={"lat": lat, "lon": long},
+            clickmode="event+select"
         )
 
         # Return fig
