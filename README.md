@@ -1,11 +1,11 @@
-# Set-up
+# Visualization dashboard JBI100
+Welcome to the group 56 visualization dashboard repository!
+This dashboard is created using [Dash](https://dash.plotly.com/introduction) and [plotly express](https://plotly.com/python/plotly-express/) for the visualization elements and used pandas/numpy for data processing. No other plots were copied from external sources and all plots were created specifically for this project using the aforementioned frameworks. 
 
-1. install [python 3.9](https://www.python.org/ftp/python/3.9.0/python-3.9.0-amd64.exe)
-2. install virtualenv: 
-`pip install virtualenv`
-3. Create virtualenv 
-`python -m venv visual`
-4. Activate virtualenv 
-`visual\Scripts\activate.bat`
-5. Install pip dependencies 
+## Set-up
+
+1. install [**python 3.10+**](https://www.python.org/downloads/release/python-3100/)
+2. Install pip dependencies 
 `pip install -r requirements.txt`
+3. run app.py: `python app.py`
+4. go to `localhost:8050` in your browser of choice.
