@@ -58,7 +58,7 @@ class MarkerMap(html.Div):
 
         def update(value):
             if value == "supermarkets":
-                self.fig = px.scatter_mapbox(df,
+                self.fig = px.scatter_mapbox(self.df,
                                              lon=self.sups['Longitude'],
                                              lat=self.sups['Latitude'],
                                              zoom=3,
@@ -68,7 +68,7 @@ class MarkerMap(html.Div):
                                              title="MarkerMap",
                                              )
             elif value == "laundromats":
-                self.fig = px.scatter_mapbox(df,
+                self.fig = px.scatter_mapbox(self.df,
                                              lon=self.sups['Longitude'],
                                              lat=self.sups['Latitude'],
                                              zoom=3,
@@ -78,7 +78,7 @@ class MarkerMap(html.Div):
                                              title="MarkerMap",
                                              )
             elif value == "subways":
-                self.fig = px.scatter_mapbox(df,
+                self.fig = px.scatter_mapbox(self.df,
                                              lon=self.subways['coordinates'][0],
                                              lat=self.subways['coordinates'][1],
                                              zoom=3,
@@ -88,7 +88,7 @@ class MarkerMap(html.Div):
                                              title="MarkerMap",
                                              )
             elif value == "taxis":
-                self.fig = px.scatter_mapbox(df,
+                self.fig = px.scatter_mapbox(self.df,
                                              lon=self.taxis['coordinates'][0],
                                              lat=self.taxis['coordinates'][1],
                                              zoom=3,
@@ -98,7 +98,7 @@ class MarkerMap(html.Div):
                                              title="MarkerMap",
                                              )
             elif value == "ArtGalleries":
-                self.fig = px.scatter_mapbox(df,
+                self.fig = px.scatter_mapbox(self.df,
                                              lon=self.artgalleries['coordinates'][0],
                                              lat=self.artgalleries['coordinates'][1],
                                              zoom=3,
@@ -108,7 +108,7 @@ class MarkerMap(html.Div):
                                              title="MarkerMap",
                                              )
 
-        self.fig = px.scatter_mapbox(data, lat="latitude", lon="longitude", color="value",
+        self.fig = px.scatter_mapbox(self.df, lat="lat", lon="long", color="price",
                                      color_continuous_scale=px.colors.sequential.Plasma)
         self.fig.update_layout(mapbox_style="open-street-map")
         self.fig.update_layout(margin={"r": 0, "t": 50, "l": 0, "b": 10})
