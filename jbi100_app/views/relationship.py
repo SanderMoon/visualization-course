@@ -1,6 +1,5 @@
 from dash import dcc, html
 import plotly.graph_objects as go
-import numpy as np
 from sklearn.model_selection import train_test_split
 import jbi100_app.data as data
 
@@ -9,7 +8,7 @@ class Relationship(html.Div):
     def __init__(self, name, feature_x, feature_y, df):
         self.html_id = name.lower()
         self.df = df
-        self.train, self.test = train_test_split(self.df, test_size=0.05)
+        self.train, self.test = train_test_split(self.df, test_size=0.09)
         self.feature_x = feature_x
         self.feature_y = feature_y
         self.processed_df = self.df
@@ -18,7 +17,6 @@ class Relationship(html.Div):
         self.type_first_var = None
         self.type_second_var = None
 
-        # Equivalent to `html.Div([...])`
         super().__init__(
             className="graph_card",
             children=[
@@ -30,23 +28,25 @@ class Relationship(html.Div):
     def update(self, host_id, neighbourhood_group, instant_bookable, cancellation, room_type,
                price, service_fee, nr_nights, nr_reviews, rating, var1, var2, click_data, triggered_id):
 
+        # if general filters are triggered
         if triggered_id != "first_vars" or triggered_id != "second_vars":
 
             if triggered_id == "map":
-                boroughs = ["Bronx", "Brooklyn", "Manhatten", "Queens", "Staten Island"]
+                boroughs = ["Bronx", "Brooklyn", "Manhattan", "Queens", "Staten Island"]
                 if click_data["points"][0]["location"] in boroughs:
                     neighbourhood_group = [click_data["points"][0]["location"]]
 
-            list = [host_id, neighbourhood_group, instant_bookable, cancellation, room_type,
-                    price, service_fee, nr_nights, nr_reviews, rating]
-            filtered_df = data.filter_data(self.df, list)
+            varlist = [host_id, neighbourhood_group, instant_bookable, cancellation, room_type,
+                       price, service_fee, nr_nights, nr_reviews, rating]
+
+            # Update df based on filtered data
+            filtered_df = data.filter_data(self.df, varlist)
             self.processed_df = filtered_df
             self.train, self.test = train_test_split(self.processed_df, test_size=0.05)
 
-
         self.fig = go.Figure()
 
-        # define 3 cases
+        # define 3 cases of relationships
         self.type_first_var = "categorical"
         self.type_second_var = "categorical"
         match var1:
@@ -86,31 +86,13 @@ class Relationship(html.Div):
             self.fig.update_xaxes(fixedrange=True)
             self.fig.update_yaxes(fixedrange=True)
 
-            # # highlight points with selection other graph
-            # if selected_data is None:
-            #     selected_index = self.df.index  # show all
-            # else:
-            #     selected_index = [  # show only selected indices
-            #         x.get('pointIndex', None)
-            #         for x in selected_data['points']
-            #     ]
-            #
-            # self.fig.data[0].update(
-            #     selectedpoints=selected_index,
-            #
-            #     # color of selected points
-            #     selected=dict(marker=dict(color=selected_color)),
-            #
-            #     # color of unselected pts
-            #     unselected=dict(marker=dict(color='rgb(200,200,200)', opacity=0.9))
-            # )
-
             # update axis titles
             self.fig.update_layout(
                 xaxis_title=var1,
                 yaxis_title=var2,
             )
 
+        # Case two: both variables categorical
         if self.type_first_var == "categorical" and self.type_second_var == "categorical":
             counts = self.processed_df.groupby(var1)[var2].value_counts()
             for group, group_df in counts.groupby(level=0):
@@ -120,6 +102,7 @@ class Relationship(html.Div):
             self.fig.update_layout(barmode='group',
                                    xaxis_title="Number of listings")
 
+        # Case 3 and 4: categorical and interval variables
         if self.type_first_var == "categorical" and self.type_second_var == "interval":
             self.fig.add_box(x=self.processed_df[var2], y=self.processed_df[var1])
             self.fig.update_traces(orientation='h')
@@ -135,7 +118,7 @@ class Relationship(html.Div):
                 xaxis_title=var1,
                 yaxis_title=var2,
             )
-        
-        self.fig.update_layout(clickmode = "event+select")
+
+        self.fig.update_layout(clickmode="event+select")
 
         return self.fig

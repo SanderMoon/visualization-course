@@ -1,10 +1,8 @@
-from dash import dcc, html
-from ..config import color_list1, color_list2
+from dash import dcc
 import numpy as np
 from dash import html
-from dash.dependencies import Input, Output
-from jbi100_app.main import app
 import dash_daq as daq
+
 
 def generate_header():
     return html.Header(
@@ -65,9 +63,24 @@ def generate_control_card(df):
     return html.Div(
         id="control-card",
         children=[
+            # Graph filters
+            html.Label("Filters for the map visualization"),
+            # Toggle for neighbourhood/borough view
+            html.Hr(),
+            html.Label("Toggle between neighbourhood and borough view"),
+            daq.BooleanSwitch(id="boolean_switch", on=False, color="#123c69"),
+            # Select for different variables
+            html.Br(),
+            html.Label("Variable to visualize on map:"),
+            dcc.Dropdown(
+                id="map_var",
+                options=useful_int_vars,
+                value="price"
+            ),
+
             html.Br(),
 
-            #General variable filters
+            # General variable filters
             html.Hr(),
             html.Label("Host identity verified", style={"font-weight": "bold"}),
             dcc.Checklist(
@@ -141,22 +154,6 @@ def generate_control_card(df):
                 step=1,
                 tooltip={"placement": "top", "always_visible": False}
             ),
-
-            # Graph filters
-            html.Label("Filters for the map visualization"),
-            # Toggle for neighbourhood/borough view
-            html.Hr(),
-            html.Label("Toggle between neighbourhood and borough view"),
-            daq.BooleanSwitch(id="boolean_switch", on=False, color="#123c69"),
-            # Select for different variables
-            html.Br(),
-            html.Label("Variable to visualize on map:"),
-            dcc.Dropdown(
-                id = "map_var",
-                options = useful_int_vars,
-                value = "price"
-            ),
-            
 
             # filters for the comparing visualization
             html.Label("Filters for the third visualization", style={"font-weight": "bold"}),
