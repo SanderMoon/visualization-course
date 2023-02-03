@@ -16,7 +16,6 @@ if __name__ == '__main__':
     map = Map("Map", df)
     distribution = Distribution("Distribution", df)
     relationship = Relationship("Relationship", "price", "number of reviews", df)
-    multiscatter = MultiScatter("Multi-scatter", df)
 
     # Create the app
     app.layout = html.Div(
@@ -42,8 +41,7 @@ if __name__ == '__main__':
                 children=[
                     map,
                     distribution,
-                    relationship,
-                    multiscatter
+                    relationship
                 ],
             ),
 

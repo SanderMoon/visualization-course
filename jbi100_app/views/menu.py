@@ -64,7 +64,7 @@ def generate_control_card(df):
         id="control-card",
         children=[
             # Graph filters
-            html.Label("Filters for the map visualization"),
+            html.Label("Filters for the map visualization",  style={"font-weight": "bold"}),
             # Toggle for neighbourhood/borough view
             html.Hr(),
             html.Label("Toggle between neighbourhood and borough view"),
