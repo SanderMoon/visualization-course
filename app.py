@@ -1,11 +1,11 @@
 from jbi100_app.main import app
 from jbi100_app.views.menu import make_menu_layout, make_header_layout
-from jbi100_app.views.scatterplot import Scatterplot
-from jbi100_app.views.splom import Splom
 from jbi100_app.views.map import Map
+from jbi100_app.views.MarkerMap import MarkerMap
 from jbi100_app.views.distribution import Distribution
 from jbi100_app.views.multiscatter import MultiScatter
 from jbi100_app.views.relationship import Relationship
+import plotly.express as px
 
 
 import jbi100_app.data as data
@@ -21,6 +21,7 @@ if __name__ == '__main__':
     df = data.get_data()
 
     map = Map("map", df)
+    marker = MarkerMap("MarkerMap", df)
     distribution = Distribution("Distribution", df)
     relationship = Relationship("relationship", "price", "number of reviews", df)
     multiscatter = MultiScatter("Multi-scatter", df)
@@ -48,6 +49,7 @@ if __name__ == '__main__':
                 className="nine columns",
                 children=[
                     map,
+                    marker,
                     distribution,
                     relationship,
                     multiscatter
@@ -66,6 +68,34 @@ if __name__ == '__main__':
         if selected_neighbourhood == "All":
             return map.update()
 
+    # ---
+    # @app.callback(
+    #     Output("map", "figure"),
+    #     [Input("dataset-dropdown", "value")]
+    # )
+    # def update_map(value):
+    #     fig = px.choropleth_mapbox(geojson=value)
+    #     return fig
+
+    @app.callback(
+        Output('map-plot', 'figure'),
+        Input('dataset-dropdown', 'value'),
+        # Input('dataset-dropdown', 'value')
+    )
+    def update():
+        return marker.update()
+
+
+    # ---
+
+    # @app.callback(
+    #     Output("MarkerMap", "figure"),
+    #     Input("neighbourhood_group", "value")
+    # )
+    # def update_map():
+    #     return marker.update()
+
+    # ---
 
     @app.callback(
         Output(relationship.html_id, "figure"),

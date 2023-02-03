@@ -1,5 +1,8 @@
-pandas
+pandas~=1.5.3
 geopandas
-dash
+dash~=2.8.1
 dash_daq
-sklearn
+sklearn~=0.0.post1
+numpy~=1.24.1
+plotly~=5.13.0
+scikit-learn~=1.2.1
